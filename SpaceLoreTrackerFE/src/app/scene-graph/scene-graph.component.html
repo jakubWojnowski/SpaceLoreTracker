@@ -1,19 +1,19 @@
 <div class="w-screen h-screen">
-  <ngt-ambient-light [intensity]="0.5" />
-  <ngt-spot-light [position]="10" [angle]="0.15" [penumbra]="1" />
-  <ngt-point-light [position]="-10" />
+  <ngt-ambient-light [intensity]="0.5"></ngt-ambient-light>
+  <ngt-spot-light [position]="[10, 10, 10]" [angle]="0.15" [penumbra]="1"></ngt-spot-light>
+  <ngt-point-light [position]="[-10, -10, -10]"></ngt-point-light>
   
   <ng-container *ngFor="let planet of planets">
     <app-orbit [radius]="planet.orbitRadius" [color]="planet.orbitColor"></app-orbit>
     <app-sphere 
-      [position]="planet.position.toArray()"
-      [radius]="planet.radius"
-      [color]="planet.color"
-      [name]="planet.name"
-      [rotationSpeed]="planet.rotationSpeed"
+      [position]="planet.position.toArray()" 
+      [radius]="planet.radius" 
+      [color]="planet.color" 
+      [name]="planet.name" 
+      [rotationSpeed]="planet.rotationSpeed" 
       [orbitSpeed]="planet.orbitSpeed">
     </app-sphere>
   </ng-container>
 
-  <ngt-orbit-controls *args="[camera, glDom]" [enableDamping]="true" />
+  <ngt-orbit-controls *args="[camera, glDom]" [enableDamping]="true"></ngt-orbit-controls>
 </div>

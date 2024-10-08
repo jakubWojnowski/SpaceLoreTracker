@@ -9,10 +9,7 @@ extend(THREE);
   standalone: true,
   imports: [NgtCanvas],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  template: `
-      <ngt-line [geometry]="geometry" [material]="material"></ngt-line>
-
-  `,
+  templateUrl: './orbit.component.html',
 })
 export class OrbitComponent implements OnInit, OnChanges {
   @Input() radius: number = 1;
