@@ -30,6 +30,10 @@ interface Planet {
 
 })
 export class SceneGraphComponent implements OnInit, AfterViewInit {
+toggleOrbits() {
+  this.showOrbits = !this.showOrbits;
+  this.cdr.detectChanges();
+}
   constructor(private cdr: ChangeDetectorRef, ) {}
 
    store = inject(NGT_STORE);

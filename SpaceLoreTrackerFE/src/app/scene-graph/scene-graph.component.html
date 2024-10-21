@@ -4,7 +4,12 @@
   <ngt-point-light [position]="[-10, -10, -10]"></ngt-point-light>
   
   <ng-container *ngFor="let planet of planets">
-    <app-orbit [radius]="planet.orbitRadius" [color]="planet.orbitColor"></app-orbit>
+    <app-orbit 
+      [radius]="planet.orbitRadius" 
+      [color]="planet.orbitColor"
+      [visible]="showOrbits"
+      (click)="toggleOrbits()">
+    </app-orbit>
     <app-sphere 
       [position]="planet.position.toArray()" 
       [scale]="planet.scale" 

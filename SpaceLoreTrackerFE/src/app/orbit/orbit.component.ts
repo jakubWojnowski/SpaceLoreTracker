@@ -1,4 +1,4 @@
-import { Component, Input, CUSTOM_ELEMENTS_SCHEMA, OnInit, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, CUSTOM_ELEMENTS_SCHEMA, OnInit, OnChanges, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import { NgtCanvas, extend } from 'angular-three';
 import * as THREE from 'three';
 
@@ -14,6 +14,8 @@ extend(THREE);
 export class OrbitComponent implements OnInit, OnChanges {
   @Input() radius: number = 1;
   @Input() color: string = 'white';
+  @Input() visible: boolean = true;
+  @Output() click = new EventEmitter<void>();
 
   geometry!: THREE.BufferGeometry;
   material!: THREE.LineBasicMaterial;
@@ -45,5 +47,9 @@ export class OrbitComponent implements OnInit, OnChanges {
     }
     
     this.geometry = new THREE.BufferGeometry().setFromPoints(points);
+  }
+
+  onClick() {
+    this.click.emit();
   }
 }
