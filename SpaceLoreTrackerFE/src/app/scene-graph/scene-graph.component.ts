@@ -5,8 +5,11 @@ import {Cube} from "../cube/cube.component";
 import {SphereComponent} from "../sphere/sphere.component";
 import {NgForOf} from "@angular/common";
 import { OrbitComponent } from "../orbit/orbit.component";
+import { TextureLoader } from 'three';
+
 extend(THREE);
 extend({ OrbitControls });
+
 interface Planet {
   name: string;
   position: THREE.Vector3;
@@ -18,6 +21,7 @@ interface Planet {
   orbitSpeed: number;
   currentAngle: number;
 }
+
 @Component({
   selector: 'app-scene-graph',
   standalone: true,
@@ -61,6 +65,13 @@ toggleOrbits() {
 
   ngAfterViewInit() {
     const scene = this.store.get('scene');
+    scene.background = new THREE.Color('black');
+
+    const textureLoader = new TextureLoader();
+    textureLoader.load('8k_stars.jpg', (texture) => {
+      scene.background = texture;
+    });
+
     scene.onBeforeRender = (renderer, scene, camera, geometry, material, group) => {
       this.updatePlanetPositions(0.016); // Zakładamy 60 FPS, więc delta to około 1/60
     };

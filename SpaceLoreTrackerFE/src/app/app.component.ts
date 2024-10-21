@@ -4,6 +4,7 @@ import {SceneGraphComponent} from "./scene-graph/scene-graph.component";
 import { NgtCanvas, extend } from 'angular-three';
 import * as THREE from 'three';
 import { RouterOutlet } from '@angular/router';
+import {Scene} from "three";
 @Component({
   selector: 'app-root',
   standalone: true,
