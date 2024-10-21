@@ -7,11 +7,10 @@
     <app-orbit [radius]="planet.orbitRadius" [color]="planet.orbitColor"></app-orbit>
     <app-sphere 
       [position]="planet.position.toArray()" 
-      [radius]="planet.radius" 
+      [scale]="planet.scale" 
       [color]="planet.color" 
       [name]="planet.name" 
-      [rotationSpeed]="planet.rotationSpeed" 
-      [orbitSpeed]="planet.orbitSpeed">
+      [rotationSpeed]="planet.rotationSpeed">
     </app-sphere>
   </ng-container>
 
