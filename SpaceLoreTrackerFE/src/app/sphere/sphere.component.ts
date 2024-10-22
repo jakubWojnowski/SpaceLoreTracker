@@ -1,4 +1,4 @@
-import {Component, CUSTOM_ELEMENTS_SCHEMA, Input, OnChanges, SimpleChanges} from '@angular/core';
+import {Component, CUSTOM_ELEMENTS_SCHEMA, Input, OnChanges, SimpleChanges, OnInit} from '@angular/core';
 import {NgtCanvas, extend, NgtBeforeRenderEvent} from 'angular-three';
 import * as THREE from 'three';
 
@@ -11,14 +11,25 @@ extend(THREE);
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './sphere.component.html',
 })
-export class SphereComponent implements OnChanges {
+export class SphereComponent implements OnChanges, OnInit {
   @Input() position: [number, number, number] = [0, 0, 0];
   @Input() scale: number = 1;
-  @Input() color: string = 'hotpink';
+  @Input() color?: string;
   @Input() name: string = '';
   @Input() rotationSpeed: number = 0.01;
+  @Input() texturePath: string = ''; // Dodaj input dla ścieżki tekstury
 
   mesh?: THREE.Mesh;
+  texture?: THREE.Texture;
+  textureLoader: THREE.TextureLoader = new THREE.TextureLoader(); // Utwórz instancję bezpośrednio
+
+  ngOnInit() {
+    if (this.texturePath) {
+      this.textureLoader.load(this.texturePath, (loadedTexture) => {
+        this.texture = loadedTexture;
+      });
+    }
+  }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['position'] && this.mesh) {
@@ -36,4 +47,6 @@ export class SphereComponent implements OnChanges {
     }
     this.mesh.rotation.y += this.rotationSpeed;
   }
+
+  protected readonly URL = URL;
 }
