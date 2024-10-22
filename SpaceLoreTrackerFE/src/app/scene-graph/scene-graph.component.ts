@@ -53,7 +53,7 @@ toggleOrbits() {
     { name: 'Ziemia', position: new THREE.Vector3(7, 0, 0), scale: 0.2, rotationSpeed: 0.01, orbitRadius: 7, orbitColor: 'lightblue', orbitSpeed: 0.036, currentAngle: 3, texturePath: '8k_earth_daymap.jpg' },
     { name: 'Mars', position: new THREE.Vector3(9, 0, 0), scale: 0.1, rotationSpeed: 0.008, orbitRadius: 9, orbitColor: 'pink', orbitSpeed: 0.024, currentAngle: 4, texturePath: '8k_mars.jpg' },
     { name: 'Jowisz', position: new THREE.Vector3(12, 0, 0), scale: 0.3, rotationSpeed: 0.005, orbitRadius: 12, orbitColor: 'tan', orbitSpeed: 0.012, currentAngle: 9, texturePath: '8k_jupiter.jpg' },
-    { name: 'Saturn', position: new THREE.Vector3(15, 0, 0), scale: 0.3, rotationSpeed: 0.004, orbitRadius: 15, orbitColor: 'khaki', orbitSpeed: 0.009, currentAngle: 10, texturePath: '8k_saturn.jpg' },
+    { name: 'Saturn', position: new THREE.Vector3(15, 0, 0), scale: 0.3, rotationSpeed: 0.004, orbitRadius: 15, orbitColor: 'khaki', orbitSpeed: 0.009, currentAngle: 10, texturePath: '4k_ceres_fictional.jpg' },
     { name: 'Uran', position: new THREE.Vector3(18, 0, 0), scale: 0.1, rotationSpeed: 0.003, orbitRadius: 18, orbitColor: 'powderblue', orbitSpeed: 0.006, currentAngle: 11, texturePath: '2k_uranus.jpg' },
     { name: 'Neptun', position: new THREE.Vector3(21, 0, 0), scale: 0.1, rotationSpeed: 0.002, orbitRadius: 21, orbitColor: 'royalblue', orbitSpeed: 0.003, currentAngle: 12, texturePath: '2k_neptune.jpg' }
   ];
@@ -83,7 +83,7 @@ toggleOrbits() {
 
 
     const textureLoader = new TextureLoader();
-    textureLoader.load('8k_stars.jpg', (texture) => {
+    textureLoader.load('8k_stars_milky_way.jpg', (texture) => {
       scene.background = texture;
     });
 
