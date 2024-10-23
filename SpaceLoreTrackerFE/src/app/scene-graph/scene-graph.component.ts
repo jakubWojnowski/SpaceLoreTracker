@@ -103,4 +103,10 @@ toggleOrbits() {
     this.cdr.detectChanges();
   }
 
+  moveToPlanet(planet: Planet) {
+    const targetPosition = planet.position.clone().multiplyScalar(1.5); // Przesuń kamerę w pobliże planety
+    this.camera.position.set(targetPosition.x, targetPosition.y, targetPosition.z);
+    this.camera.lookAt(planet.position);
+  }
+
 }

@@ -1,4 +1,4 @@
-import {Component, CUSTOM_ELEMENTS_SCHEMA, Input, OnChanges, SimpleChanges, OnInit} from '@angular/core';
+import {Component, CUSTOM_ELEMENTS_SCHEMA, Input, OnChanges, SimpleChanges, OnInit, Output, EventEmitter} from '@angular/core';
 import {NgtCanvas, extend, NgtBeforeRenderEvent} from 'angular-three';
 import * as THREE from 'three';
 
@@ -18,6 +18,7 @@ export class SphereComponent implements OnChanges, OnInit {
   @Input() name: string = '';
   @Input() rotationSpeed: number = 0.01;
   @Input() texturePath: string = ''; // Dodaj input dla ścieżki tekstury
+  @Output() clicked = new EventEmitter<void>(); // Dodaj output dla kliknięcia
 
   mesh?: THREE.Mesh;
   texture?: THREE.Texture;
@@ -46,6 +47,10 @@ export class SphereComponent implements OnChanges, OnInit {
       this.mesh = event.object;
     }
     this.mesh.rotation.y += this.rotationSpeed;
+  }
+
+  onClick() {
+    this.clicked.emit(); // Emituj zdarzenie kliknięcia
   }
 
   protected readonly URL = URL;

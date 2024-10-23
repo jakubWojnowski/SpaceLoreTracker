@@ -16,7 +16,8 @@
       [color]="planet.color" 
       [name]="planet.name" 
       [rotationSpeed]="planet.rotationSpeed"
-      [texturePath]="planet.texturePath">
+      [texturePath]="planet.texturePath"
+      (clicked)="moveToPlanet(planet)">
     </app-sphere>
   </ng-container>
 

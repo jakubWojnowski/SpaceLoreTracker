@@ -1,4 +1,4 @@
-  <ngt-mesh [position]="position" [scale]="[scale, scale, scale]" (beforeRender)="onBeforeRender($event)">
+  <ngt-mesh [position]="position" [scale]="[scale, scale, scale]" (beforeRender)="onBeforeRender($event)" (click)="onClick()">
     <ngt-sphere-geometry [args]="[1, 32, 32]"></ngt-sphere-geometry>
     <ngt-mesh-standard-material [map]="texture" [color]="color"></ngt-mesh-standard-material>
   </ngt-mesh>
