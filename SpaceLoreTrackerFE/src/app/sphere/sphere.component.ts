@@ -50,7 +50,7 @@ export class SphereComponent implements OnChanges, OnInit {
   }
 
   onClick() {
-    this.clicked.emit(); // Emituj zdarzenie kliknięcia
+    this.clicked.emit();
   }
 
   protected readonly URL = URL;

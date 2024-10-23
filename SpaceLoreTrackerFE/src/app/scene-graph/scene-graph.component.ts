@@ -6,6 +6,8 @@ import {SphereComponent} from "../sphere/sphere.component";
 import {NgForOf} from "@angular/common";
 import { OrbitComponent } from "../orbit/orbit.component";
 import { TextureLoader } from 'three';
+import { Vector3 } from 'three';
+import { gsap } from 'gsap';
 
 extend(THREE);
 extend({ OrbitControls });
@@ -60,6 +62,9 @@ toggleOrbits() {
 
   showOrbits: boolean = true;
 
+  controls: any; // Dla kontroli OrbitControls
+  targetPosition: Vector3 = new Vector3();
+
   ngOnInit() {
     this.updatePlanetPositions(0);
   }
@@ -67,20 +72,6 @@ toggleOrbits() {
   ngAfterViewInit() {
     const scene = this.store.get('scene');
     scene.background = new THREE.Color('black');
-    this.planets.forEach(planet => {
-      // const sphere = new THREE.Mesh(new THREE.SphereGeometry(1, 32, 32), new THREE.MeshStandardMaterial({ color: planet.color }));
-      // sphere.scale.setScalar(planet.scale);
-      // sphere.position.copy(planet.position);
-      // scene.add(sphere);
-      //
-      // if (this.showOrbits) {
-      //   const orbit = new THREE.Line(new THREE.CircleGeometry(planet.orbitRadius, 64), new THREE.LineBasicMaterial({ color: planet.orbitColor }));
-      //   orbit.rotation.x = Math.PI / 2;
-      //   scene.add(orbit);
-      // }
-
-    });
-
 
     const textureLoader = new TextureLoader();
     textureLoader.load('8k_stars_milky_way.jpg', (texture) => {
@@ -88,8 +79,23 @@ toggleOrbits() {
     });
 
     scene.onBeforeRender = (renderer, scene, camera, geometry, material, group) => {
-      this.updatePlanetPositions(0.016); // Zakładamy 60 FPS, więc delta to około 1/60
+      this.updatePlanetPositions(0.016);
     };
+
+    const camera = this.camera;
+    const renderer = this.store.get('gl');
+
+    this.controls = new OrbitControls(camera, renderer.domElement);
+    this.controls.enableDamping = true;
+    this.controls.dampingFactor = 0.05;
+    this.controls.rotateSpeed = 0.5;
+    this.controls.zoomSpeed = 0.5;
+    this.controls.panSpeed = 0.5;
+
+    this.store.get('gl').setAnimationLoop(() => {
+      this.controls.update();
+      renderer.render(scene, camera);
+    });
   }
 
   updatePlanetPositions(delta: number) {
@@ -104,9 +110,29 @@ toggleOrbits() {
   }
 
   moveToPlanet(planet: Planet) {
-    const targetPosition = planet.position.clone().multiplyScalar(1.5); // Przesuń kamerę w pobliże planety
-    this.camera.position.set(targetPosition.x, targetPosition.y, targetPosition.z);
-    this.camera.lookAt(planet.position);
+    const targetPosition = planet.position.clone().multiplyScalar(1.5);
+    
+    gsap.to(this.camera.position, {
+      duration: 2,
+      x: targetPosition.x,
+      y: targetPosition.y,
+      z: targetPosition.z,
+      onUpdate: () => {
+        this.camera.lookAt(planet.position);
+      }
+    });
+
+    gsap.to(this.controls.target, {
+      duration: 2,
+      x: planet.position.x,
+      y: planet.position.y,
+      z: planet.position.z,
+      onComplete: () => {
+        this.controls.update();
+      }
+    });
+
+    this.cdr.detectChanges();
   }
 
 }
