@@ -8,6 +8,7 @@ import { OrbitComponent } from "../orbit/orbit.component";
 import { TextureLoader } from 'three';
 import { Vector3 } from 'three';
 import { gsap } from 'gsap';
+import { CameraService } from '../services/camera.service';
 
 extend(THREE);
 extend({ OrbitControls });
@@ -34,6 +35,7 @@ interface Planet {
   templateUrl: './scene-graph.component.html',
   styleUrl: './scene-graph.component.css',
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  providers: [CameraService]
 
 })
 export class SceneGraphComponent implements OnInit, AfterViewInit {
@@ -41,12 +43,12 @@ toggleOrbits() {
   this.showOrbits = !this.showOrbits;
   this.cdr.detectChanges();
 }
-  constructor(private cdr: ChangeDetectorRef, ) {}
+  constructor(
+    private cdr: ChangeDetectorRef,
+    private cameraService: CameraService
+  ) {}
 
    store = inject(NGT_STORE);
-
-  readonly camera = this.store.get('camera');
-  readonly glDom = this.store.get('gl', 'domElement');
 
   planets: Planet[] = [
     { name: 'Słońce', position: new THREE.Vector3(0, 0, 0), scale: 1.5, rotationSpeed: 0.001, orbitRadius: 0, orbitColor: 'transparent', orbitSpeed: 0, currentAngle: 0, texturePath: '8k_sun.jpg' },
@@ -61,9 +63,6 @@ toggleOrbits() {
   ];
 
   showOrbits: boolean = true;
-
-  controls: any; // Dla kontroli OrbitControls
-  targetPosition: Vector3 = new Vector3();
 
   ngOnInit() {
     this.updatePlanetPositions(0);
@@ -82,20 +81,8 @@ toggleOrbits() {
       this.updatePlanetPositions(0.016);
     };
 
-    const camera = this.camera;
-    const renderer = this.store.get('gl');
-
-    this.controls = new OrbitControls(camera, renderer.domElement);
-    this.controls.enableDamping = true;
-    this.controls.dampingFactor = 0.05;
-    this.controls.rotateSpeed = 0.5;
-    this.controls.zoomSpeed = 0.5;
-    this.controls.panSpeed = 0.5;
-
-    this.store.get('gl').setAnimationLoop(() => {
-      this.controls.update();
-      renderer.render(scene, camera);
-    });
+    this.cameraService.initialize(this.store);
+    this.cameraService.initializeControls();
   }
 
   updatePlanetPositions(delta: number) {
@@ -111,27 +98,7 @@ toggleOrbits() {
 
   moveToPlanet(planet: Planet) {
     const targetPosition = planet.position.clone().multiplyScalar(1.5);
-    
-    gsap.to(this.camera.position, {
-      duration: 2,
-      x: targetPosition.x,
-      y: targetPosition.y,
-      z: targetPosition.z,
-      onUpdate: () => {
-        this.camera.lookAt(planet.position);
-      }
-    });
-
-    gsap.to(this.controls.target, {
-      duration: 2,
-      x: planet.position.x,
-      y: planet.position.y,
-      z: planet.position.z,
-      onComplete: () => {
-        this.controls.update();
-      }
-    });
-
+    this.cameraService.moveCameraToPosition(targetPosition, planet.position);
     this.cdr.detectChanges();
   }
 
