@@ -10,6 +10,7 @@ export class FollowCameraMode implements CameraMode {
   private controls!: OrbitControls;
   private followTarget?: TargetObject;
   private isTransitioning: boolean = false;
+  private currentDistance: number = 0;
 
   initialize(camera: PerspectiveCamera, controls: OrbitControls, state?: CameraState): void {
     this.camera = camera;
@@ -26,6 +27,7 @@ export class FollowCameraMode implements CameraMode {
     if (state) {
       this.camera.position.copy(state.lastPosition);
       this.controls.target.copy(state.lastTarget);
+      this.currentDistance = this.camera.position.distanceTo(this.controls.target);
     }
   }
 
@@ -36,11 +38,12 @@ export class FollowCameraMode implements CameraMode {
 
     // Oblicz początkową odległość bazując na skali obiektu (2x średnica)
     const initialDistance = (targetObject?.scale || 1) * 4;
+    this.currentDistance = initialDistance;
     
     // Użyj ostatniej pozycji kamery jeśli jest dostępna
     const startPosition = state?.lastPosition || this.camera.position;
     const currentDirection = new Vector3().subVectors(startPosition, state?.lastTarget || this.controls.target).normalize();
-    const newPosition = target.clone().add(currentDirection.multiplyScalar(initialDistance));
+    const newPosition = target.clone().add(currentDirection.multiplyScalar(this.currentDistance));
 
     // Animuj przejście punktu centralnego i kamery
     gsap.to(this.controls.target, {
@@ -67,7 +70,13 @@ export class FollowCameraMode implements CameraMode {
     if (!this.controls || !this.followTarget) return;
 
     if (!this.isTransitioning) {
+      const currentDirection = new Vector3().subVectors(this.camera.position, this.controls.target).normalize();
+      this.currentDistance = this.camera.position.distanceTo(this.controls.target);
+      
       this.controls.target.copy(this.followTarget.position);
+      
+      const newPosition = this.followTarget.position.clone().add(currentDirection.multiplyScalar(this.currentDistance));
+      this.camera.position.copy(newPosition);
     }
     
     this.controls.update();
