@@ -6,10 +6,15 @@ export interface TargetObject {
   scale?: number;
 }
 
+export interface CameraState {
+  lastPosition: Vector3;
+  lastTarget: Vector3;
+}
+
 export interface CameraMode {
-  initialize(camera: PerspectiveCamera, controls: OrbitControls): void;
+  initialize(camera: PerspectiveCamera, controls: OrbitControls, state?: CameraState): void;
   update(): void;
-  setTarget?(target: Vector3, targetObject?: TargetObject): void;
+  setTarget?(target: Vector3, targetObject?: TargetObject, state?: CameraState): void;
   cleanup(): void;
 }
 
