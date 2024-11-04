@@ -21,8 +21,8 @@ export class FollowCameraMode implements CameraMode {
     this.controls.rotateSpeed = 0.3;
     this.controls.zoomSpeed = 0.3;
     this.controls.enablePan = false;
-    this.controls.minDistance = 2;
-    this.controls.maxDistance = 20;
+    this.controls.minDistance = 0.5;
+    this.controls.maxDistance = 50;
 
     if (state) {
       this.camera.position.copy(state.lastPosition);
