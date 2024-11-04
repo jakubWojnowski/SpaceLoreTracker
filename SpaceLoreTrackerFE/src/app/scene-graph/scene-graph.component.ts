@@ -79,6 +79,7 @@ toggleOrbits() {
     });
 
     scene.onBeforeRender = (renderer, scene, camera, geometry, material, group) => {
+      this.cameraService.update();
       this.updatePlanetPositions(0.016);
     };
 
