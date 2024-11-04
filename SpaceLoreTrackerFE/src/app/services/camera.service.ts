@@ -1,74 +1,46 @@
 import { Injectable } from '@angular/core';
-import { Vector3 } from 'three';
+import { Vector3, PerspectiveCamera } from 'three';
 import { OrbitControls } from 'three-stdlib';
-import { gsap } from 'gsap';
-import { NGT_STORE } from 'angular-three';
+import { FreeCameraMode } from './camera/free-camera.mode';
+import { FollowCameraMode } from './camera/follow-camera.mode';
+import { CameraMode, CameraModeType } from './camera/camera-mode.interface';
 
 @Injectable()
 export class CameraService {
-  private controls: OrbitControls | null = null;
-  private store: any;
-  private camera: any;
+  private camera!: PerspectiveCamera;
+  private controls!: OrbitControls;
+  private currentMode!: CameraMode;
+  private modes: Map<CameraModeType, CameraMode>;
 
-  constructor() {}
-
-  initialize(store: any) {
-    this.store = store;
-    this.camera = store.get('camera');
+  constructor() {
+    const modesArray: [CameraModeType, CameraMode][] = [
+      [CameraModeType.FREE, new FreeCameraMode()],
+      [CameraModeType.FOLLOW, new FollowCameraMode()]
+    ];
+    
+    this.modes = new Map<CameraModeType, CameraMode>(modesArray);
+    this.currentMode = this.modes.get(CameraModeType.FREE)!;
   }
 
-  initializeControls() {
-    if (!this.store) return;
-    
-    const renderer = this.store.get('gl');
+  initialize(store: any): void {
+    this.camera = store.get('camera') as PerspectiveCamera;
+    const renderer = store.get('gl');
     this.controls = new OrbitControls(this.camera, renderer.domElement);
-    this.setupControls();
-    this.setupAnimationLoop(renderer);
-  }
-
-  private setupControls() {
-    if (!this.controls) return;
     
-    this.controls.enableDamping = true;
-    this.controls.dampingFactor = 0.05;
-    this.controls.rotateSpeed = 0.5;
-    this.controls.zoomSpeed = 0.5;
-    this.controls.panSpeed = 0.5;
+    this.currentMode.initialize(this.camera, this.controls);
   }
 
-  private setupAnimationLoop(renderer: any) {
-    const scene = this.store.get('scene');
-    renderer.setAnimationLoop(() => {
-      if (this.controls) {
-        this.controls.update();
-      }
-      renderer.render(scene, this.camera);
-    });
+  setMode(mode: CameraModeType, target?: Vector3, targetObject?: { position: Vector3 }): void {
+    this.currentMode.cleanup();
+    this.currentMode = this.modes.get(mode)!;
+    this.currentMode.initialize(this.camera, this.controls);
+    
+    if (mode === CameraModeType.FOLLOW && target) {
+      (this.currentMode as FollowCameraMode).setTarget(target, targetObject);
+    }
   }
 
-  moveCameraToPosition(targetPosition: Vector3, lookAtPosition: Vector3) {
-    if (!this.controls || !this.camera) return;
-
-    gsap.to(this.camera.position, {
-      duration: 2,
-      x: targetPosition.x,
-      y: targetPosition.y,
-      z: targetPosition.z,
-      onUpdate: () => {
-        this.camera.lookAt(lookAtPosition);
-      }
-    });
-
-    gsap.to(this.controls.target, {
-      duration: 2,
-      x: lookAtPosition.x,
-      y: lookAtPosition.y,
-      z: lookAtPosition.z,
-      onComplete: () => {
-        if (this.controls) {
-          this.controls.update();
-        }
-      }
-    });
+  update(): void {
+    this.currentMode.update();
   }
 }

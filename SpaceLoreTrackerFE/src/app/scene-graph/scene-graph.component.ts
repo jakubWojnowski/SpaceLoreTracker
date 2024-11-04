@@ -9,6 +9,7 @@ import { TextureLoader } from 'three';
 import { Vector3 } from 'three';
 import { gsap } from 'gsap';
 import { CameraService } from '../services/camera.service';
+import { CameraModeType } from '../services/camera/camera-mode.interface';
 
 extend(THREE);
 extend({ OrbitControls });
@@ -82,7 +83,7 @@ toggleOrbits() {
     };
 
     this.cameraService.initialize(this.store);
-    this.cameraService.initializeControls();
+    this.cameraService.setMode(CameraModeType.FREE);
   }
 
   updatePlanetPositions(delta: number) {
@@ -97,8 +98,12 @@ toggleOrbits() {
   }
 
   moveToPlanet(planet: Planet) {
-    const targetPosition = planet.position.clone().multiplyScalar(1.5);
-    this.cameraService.moveCameraToPosition(targetPosition, planet.position);
+    this.cameraService.setMode(CameraModeType.FOLLOW, planet.position, planet);
+    this.cdr.detectChanges();
+  }
+
+  toggleFreeCamera() {
+    this.cameraService.setMode(CameraModeType.FREE);
     this.cdr.detectChanges();
   }
 
