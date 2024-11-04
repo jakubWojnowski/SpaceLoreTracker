@@ -99,7 +99,10 @@ toggleOrbits() {
   }
 
   moveToPlanet(planet: Planet) {
-    this.cameraService.setMode(CameraModeType.FOLLOW, planet.position, planet);
+    this.cameraService.setMode(CameraModeType.FOLLOW, planet.position, { 
+      position: planet.position, 
+      scale: planet.scale 
+    });
     this.cdr.detectChanges();
   }
 

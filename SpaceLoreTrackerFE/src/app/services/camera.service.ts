@@ -3,7 +3,7 @@ import { Vector3, PerspectiveCamera } from 'three';
 import { OrbitControls } from 'three-stdlib';
 import { FreeCameraMode } from './camera/free-camera.mode';
 import { FollowCameraMode } from './camera/follow-camera.mode';
-import { CameraMode, CameraModeType } from './camera/camera-mode.interface';
+import { CameraMode, CameraModeType, TargetObject } from './camera/camera-mode.interface';
 
 @Injectable()
 export class CameraService {
@@ -30,7 +30,7 @@ export class CameraService {
     this.currentMode.initialize(this.camera, this.controls);
   }
 
-  setMode(mode: CameraModeType, target?: Vector3, targetObject?: { position: Vector3 }): void {
+  setMode(mode: CameraModeType, target?: Vector3, targetObject?: TargetObject): void {
     this.currentMode.cleanup();
     this.currentMode = this.modes.get(mode)!;
     this.currentMode.initialize(this.camera, this.controls);
