@@ -1,4 +1,4 @@
-import {Component, CUSTOM_ELEMENTS_SCHEMA, inject, ViewChildren, QueryList, ElementRef, ChangeDetectorRef, OnInit, AfterViewInit} from '@angular/core';
+import {Component, CUSTOM_ELEMENTS_SCHEMA, inject, ViewChildren, QueryList, ElementRef, ChangeDetectorRef, OnInit, AfterViewInit, HostListener} from '@angular/core';
 import {NgtCanvas, extend, NgtBeforeRenderEvent, NgtArgs, NGT_STORE, NgtRenderState} from 'angular-three';
 import { OrbitControls } from 'three-stdlib';import * as THREE from 'three';
 import {Cube} from "../cube/cube.component";
@@ -40,14 +40,26 @@ interface Planet {
 
 })
 export class SceneGraphComponent implements OnInit, AfterViewInit {
-toggleOrbits() {
-  this.showOrbits = !this.showOrbits;
-  this.cdr.detectChanges();
-}
+  @HostListener('document:keydown.escape', ['$event'])
+  handleEscapeKey(event: KeyboardEvent) {
+    this.toggleFreeCamera();
+  }
+
+  toggleOrbits() {
+    this.showOrbits = !this.showOrbits;
+    this.cdr.detectChanges();
+  }
+
   constructor(
     private cdr: ChangeDetectorRef,
     private cameraService: CameraService
-  ) {}
+  ) {
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        this.toggleFreeCamera();
+      }
+    });
+  }
 
    store = inject(NGT_STORE);
 
@@ -109,6 +121,14 @@ toggleOrbits() {
   toggleFreeCamera() {
     this.cameraService.setMode(CameraModeType.FREE);
     this.cdr.detectChanges();
+  }
+
+  ngOnDestroy() {
+    document.removeEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        this.toggleFreeCamera();
+      }
+    });
   }
 
 }
