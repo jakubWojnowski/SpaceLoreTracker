@@ -19,12 +19,20 @@ export class FollowCameraMode implements CameraMode {
     this.controls.enableDamping = true;
     this.controls.dampingFactor = 0.1;
     this.controls.rotateSpeed = 0.3;
-    this.controls.zoomSpeed = 0.3;
+    this.controls.zoomSpeed = 2;
     this.controls.enablePan = false;
-    this.controls.minDistance = 0.5;
-    this.controls.maxDistance = 50;
+    this.controls.minDistance = 1;
+    this.controls.maxDistance = 200000;
 
-    if (state) {
+    if (!state) {
+      const halfMaxDistance = this.controls.maxDistance / 2;
+      this.camera.position.set(
+        halfMaxDistance * 0.7,
+        halfMaxDistance * 0.3,
+        halfMaxDistance * 0.7
+      );
+      this.camera.lookAt(0, 0, 0);
+    } else {
       this.camera.position.copy(state.lastPosition);
       this.controls.target.copy(state.lastTarget);
       this.currentDistance = this.camera.position.distanceTo(this.controls.target);

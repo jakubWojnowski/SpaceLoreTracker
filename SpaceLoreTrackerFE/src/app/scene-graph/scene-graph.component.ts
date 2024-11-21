@@ -64,15 +64,105 @@ export class SceneGraphComponent implements OnInit, AfterViewInit {
    store = inject(NGT_STORE);
 
   planets: Planet[] = [
-    { name: 'Słońce', position: new THREE.Vector3(0, 0, 0), scale: 1.5, rotationSpeed: 0.001, orbitRadius: 0, orbitColor: 'transparent', orbitSpeed: 0, currentAngle: 0, texturePath: '8k_sun.jpg' },
-    { name: 'Merkury', position: new THREE.Vector3(3, 0, 0), scale: 0.1, rotationSpeed: 0.02, orbitRadius: 3, orbitColor: 'lightgray', orbitSpeed: 0.060, currentAngle: 5, texturePath: '8k_mercury.jpg' },
-    { name: 'Wenus', position: new THREE.Vector3(5, 0, 0), scale: 0.1, rotationSpeed: 0.015, orbitRadius: 5, orbitColor: 'lightyellow', orbitSpeed: 0.048, currentAngle: 2, texturePath: '8k_venus_surface.jpg' },
-    { name: 'Ziemia', position: new THREE.Vector3(7, 0, 0), scale: 0.2, rotationSpeed: 0.01, orbitRadius: 7, orbitColor: 'lightblue', orbitSpeed: 0.036, currentAngle: 3, texturePath: '8k_earth_daymap.jpg' },
-    { name: 'Mars', position: new THREE.Vector3(9, 0, 0), scale: 0.1, rotationSpeed: 0.008, orbitRadius: 9, orbitColor: 'pink', orbitSpeed: 0.024, currentAngle: 4, texturePath: '8k_mars.jpg' },
-    { name: 'Jowisz', position: new THREE.Vector3(12, 0, 0), scale: 0.3, rotationSpeed: 0.005, orbitRadius: 12, orbitColor: 'tan', orbitSpeed: 0.012, currentAngle: 9, texturePath: '8k_jupiter.jpg' },
-    { name: 'Saturn', position: new THREE.Vector3(15, 0, 0), scale: 0.3, rotationSpeed: 0.004, orbitRadius: 15, orbitColor: 'khaki', orbitSpeed: 0.009, currentAngle: 10, texturePath: '4k_ceres_fictional.jpg' },
-    { name: 'Uran', position: new THREE.Vector3(18, 0, 0), scale: 0.1, rotationSpeed: 0.003, orbitRadius: 18, orbitColor: 'powderblue', orbitSpeed: 0.006, currentAngle: 11, texturePath: '2k_uranus.jpg' },
-    { name: 'Neptun', position: new THREE.Vector3(21, 0, 0), scale: 0.1, rotationSpeed: 0.002, orbitRadius: 21, orbitColor: 'royalblue', orbitSpeed: 0.003, currentAngle: 12, texturePath: '2k_neptune.jpg' }
+    { 
+      name: 'Słońce',
+      position: new THREE.Vector3(0, 0, 0),
+      scale: 20.0,
+      rotationSpeed: 0.001,
+      orbitRadius: 0,
+      orbitColor: 'transparent',
+      orbitSpeed: 0,
+      currentAngle: 0,
+      texturePath: '8k_sun.jpg'
+    },
+    { 
+      name: 'Merkury',
+      position: new THREE.Vector3(5.8, 0, 0),
+      scale: 0.383,
+      rotationSpeed: 0.0172,
+      orbitRadius: 30,
+      orbitColor: 'lightgray',
+      orbitSpeed: 0.0474,
+      currentAngle: Math.random() * Math.PI * 2,
+      texturePath: '8k_mercury.jpg'
+    },
+    { 
+      name: 'Wenus',
+      position: new THREE.Vector3(10.8, 0, 0),
+      scale: 0.949,
+      rotationSpeed: -0.0041,
+      orbitRadius: 45,
+      orbitColor: 'lightyellow',
+      orbitSpeed: 0.0185,
+      currentAngle: Math.random() * Math.PI * 2,
+      texturePath: '8k_venus_surface.jpg'
+    },
+    { 
+      name: 'Ziemia',
+      position: new THREE.Vector3(15, 0, 0),
+      scale: 1.0,
+      rotationSpeed: 0.1,
+      orbitRadius: 60,
+      orbitColor: 'lightblue',
+      orbitSpeed: 0.0114,
+      currentAngle: Math.random() * Math.PI * 2,
+      texturePath: '8k_earth_daymap.jpg'
+    },
+    { 
+      name: 'Mars',
+      position: new THREE.Vector3(22.8, 0, 0),
+      scale: 0.532,
+      rotationSpeed: 0.0097,
+      orbitRadius: 75,
+      orbitColor: 'pink',
+      orbitSpeed: 0.0061,
+      currentAngle: Math.random() * Math.PI * 2,
+      texturePath: '8k_mars.jpg'
+    },
+    { 
+      name: 'Jowisz',
+      position: new THREE.Vector3(77.8, 0, 0),
+      scale: 11.209,
+      rotationSpeed: 0.0244,
+      orbitRadius: 100,
+      orbitColor: 'tan',
+      orbitSpeed: 0.0010,
+      currentAngle: Math.random() * Math.PI * 2,
+      texturePath: '8k_jupiter.jpg'
+    },
+    { 
+      name: 'Saturn',
+      position: new THREE.Vector3(142.7, 0, 0),
+      scale: 9.449,
+      rotationSpeed: 0.0227,
+      orbitRadius: 130,
+      orbitColor: 'khaki',
+      orbitSpeed: 0.0004,
+      currentAngle: Math.random() * Math.PI * 2,
+      texturePath: '4k_saturn.jpg'
+    },
+    { 
+      name: 'Uran',
+      position: new THREE.Vector3(287.1, 0, 0),
+      scale: 4.007,
+      rotationSpeed: -0.0142,
+      orbitRadius: 160,
+      orbitColor: 'powderblue',
+      orbitSpeed: 0.0001,
+      currentAngle: Math.random() * Math.PI * 2,
+      texturePath: '2k_uranus.jpg'
+    },
+    { 
+      name: 'Neptun',
+      position: new THREE.Vector3(449.5, 0, 0),
+      scale: 3.883,
+      rotationSpeed: 0.0155,
+      orbitRadius: 190,
+      orbitColor: 'royalblue',
+      orbitSpeed: 0.00006,
+      currentAngle: Math.random() * Math.PI * 2,
+      texturePath: '2k_neptune.jpg'
+    }
   ];
 
   showOrbits: boolean = true;

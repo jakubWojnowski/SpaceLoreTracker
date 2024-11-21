@@ -45,7 +45,7 @@ export class CameraService {
     this.currentMode = this.modes.get(mode)!;
     
     if (mode === CameraModeType.FOLLOW && target) {
-      this.currentMode.initialize(this.camera, this.controls);
+      this.currentMode.initialize(this.camera, this.controls, cameraState);
       (this.currentMode as FollowCameraMode).setTarget(target, targetObject, cameraState);
     } else {
       this.currentMode.initialize(this.camera, this.controls, cameraState);
