@@ -34,6 +34,5 @@ export class FreeCameraMode implements CameraMode {
   }
 
   cleanup(): void {
-    // Usuwamy reset kontrolek
   }
 } 
