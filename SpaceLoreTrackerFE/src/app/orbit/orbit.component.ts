@@ -19,70 +19,53 @@ extend(THREE);
       <ngt-line-basic-material
         [transparent]="true"
         [opacity]="opacity"
-        [color]="currentColor">
+        [linewidth]="2"
+        [color]="color">
       </ngt-line-basic-material>
     </ngt-mesh>
   `
 })
-export class OrbitComponent implements OnInit, OnChanges {
-  @Input() radius: number = 1;
-  @Input() color: string = 'white';
+export class OrbitComponent implements OnInit {
+  @Input() radius: number = 10;
+  @Input() color: string = 'red';
   @Input() visible: boolean = true;
   @Output() click = new EventEmitter<void>();
 
-  opacity = 0.5;
-  currentColor!: THREE.Color;
-  originalColor!: THREE.Color;
-  geometryAttributes: Record<string, THREE.BufferAttribute> = {};
+  opacity: number = 0.5;
+  geometryAttributes: any;
 
   ngOnInit() {
-    this.originalColor = new THREE.Color(this.color);
-    this.currentColor = this.originalColor.clone();
-    this.updateOrbit();
-  }
-
-  updateOrbit() {
     const segments = 128;
     const points = [];
-
     for (let i = 0; i <= segments; i++) {
-      const theta = (i / segments) * Math.PI * 2;
-      points.push(
-        Math.cos(theta) * this.radius,
-        0,
-        Math.sin(theta) * this.radius
-      );
+      const angle = (i / segments) * Math.PI * 2;
+      const x = Math.cos(angle) * this.radius;
+      const z = Math.sin(angle) * this.radius;
+      points.push(new THREE.Vector3(x, 0, z));
     }
 
-    this.geometryAttributes['position'] = new THREE.Float32BufferAttribute(points, 3);
+    const positions = new Float32Array(points.length * 3);
+    points.forEach((point, i) => {
+      positions[i * 3] = point.x;
+      positions[i * 3 + 1] = point.y;
+      positions[i * 3 + 2] = point.z;
+    });
+
+    this.geometryAttributes = {
+      position: new THREE.BufferAttribute(positions, 3)
+    };
   }
 
   onPointerOver() {
-    this.opacity = 1;
-    this.currentColor.setRGB(
-      this.originalColor.r * 1.5,
-      this.originalColor.g * 1.5,
-      this.originalColor.b * 1.5
-    );
+    this.opacity = 1.0;
   }
 
   onPointerOut() {
     this.opacity = 0.5;
-    this.currentColor.copy(this.originalColor);
   }
 
   onMeshClick(event: NgtThreeEvent<PointerEvent>) {
     event.stopPropagation();
     this.click.emit();
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes['radius']) {
-      this.updateOrbit();
-    }
-    if (changes['color'] && this.originalColor && this.currentColor) {
-      this.originalColor.set(this.color);
-      this.currentColor.copy(this.originalColor);
-    }
   }
 }
