@@ -13,13 +13,13 @@ export class FreeCameraMode implements CameraMode {
     this.controls = controls;
     
     this.controls.enableDamping = true;
-    this.controls.dampingFactor = 0.05;
+    this.controls.dampingFactor = 0.5;
     this.controls.rotateSpeed = 0.5;
-    this.controls.zoomSpeed = 0.5;
+    this.controls.zoomSpeed = 2;
     this.controls.panSpeed = 0.5;
     this.controls.enablePan = true;
-    this.controls.minDistance = 0.5;
-    this.controls.maxDistance = 100;
+    this.controls.minDistance = 1;
+    this.controls.maxDistance = 2000000;
 
     if (state) {
       this.camera.position.copy(state.lastPosition);
