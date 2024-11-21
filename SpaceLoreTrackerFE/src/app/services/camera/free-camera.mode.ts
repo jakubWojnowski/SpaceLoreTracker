@@ -19,7 +19,7 @@ export class FreeCameraMode implements CameraMode {
     this.controls.panSpeed = 0.5;
     this.controls.enablePan = true;
     this.controls.minDistance = 1;
-    this.controls.maxDistance = 2000000;
+    this.controls.maxDistance = 10000000;
 
     if (state) {
       this.camera.position.copy(state.lastPosition);

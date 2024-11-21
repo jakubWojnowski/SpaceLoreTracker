@@ -174,6 +174,13 @@ export class SceneGraphComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     const scene = this.store.get('scene');
+    const camera = this.store.get('camera');
+    
+    // Ustawiamy parametry kamery dla większego zakresu renderowania
+    camera.near = 0.1;
+    camera.far = 1000000;
+    camera.updateProjectionMatrix();
+    
     scene.background = new THREE.Color('black');
 
     const textureLoader = new TextureLoader();
